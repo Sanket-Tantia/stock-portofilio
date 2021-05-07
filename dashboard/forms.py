@@ -14,7 +14,7 @@ class AddStockForm(forms.ModelForm):
 class RecordTradeForm(forms.ModelForm):
     class Meta:
         model = Trade
-        fields = ['txn_date', 'txn_id', 'stock_id', 'price', 'is_buy', 'shares']
+        fields = ['txn_date', 'stock_id', 'price', 'is_buy', 'shares']
 
 
 class SharesInfoForm(forms.ModelForm):

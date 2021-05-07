@@ -18,7 +18,6 @@ class Stock(models.Model):
 
 
 class Trade(models.Model):
-    txn_id = models.CharField(max_length=255, null=False, unique=True)
     stock_id = models.ForeignKey(Stock, on_delete=models.DO_NOTHING)
     price = models.DecimalField(null=False, blank=False, max_digits=10, decimal_places=4)
     is_buy = models.BooleanField(default=False)
