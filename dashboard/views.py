@@ -100,7 +100,6 @@ def home(request):
         recent_trades.append({
             'price': each_trade.price,
             'is_buy': 'Bought' if each_trade.is_buy else 'Sold',
-            'txn_id': each_trade.txn_id,
             'txn_date': each_trade.txn_date,
             'stock_name': each_trade.stock_id.company_name,
             'shares': each_trade.shares
