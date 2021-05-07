@@ -1,0 +1,253 @@
+{%  extends 'deskapp/main.html' %}
+{% load static %}
+{% block content %}
+
+<body class="sb-nav-fixed">
+    {%  include 'deskapp/navbar.html' %}
+    <div id="layoutSidenav">
+        {%  include 'deskapp/sidebar.html' %}
+        <div id="layoutSidenav_content">
+            <main>
+                <div class="container-fluid">
+                    <!-- <h2 class="mt-4">Admin Panel</h2> -->
+                    <div class="form-group"></div>
+                    <!-- <ol class="breadcrumb mb-4">
+                        <li class="breadcrumb-item active">Dashboard</li>
+                    </ol> -->
+                    <div class="row">
+                        <div class="col-xl-3 col-md-6" style="opacity: 100%;">
+                            <div class="card bg-success text-white mb-4">
+                                <div class="card-body">Nifty : {{total_act_stockist}}</div>
+                                <!-- <div class="card-footer d-flex align-items-center justify-content-between">
+                                    <a class="small text-white stretched-link" href="#">View Details</a>
+                                    <div class="small text-white"><i class="fas fa-angle-right"></i></div>
+                                </div> -->
+                            </div>
+                        </div>
+                        <div class="col-xl-3 col-md-6" style="opacity: 100%">
+                            <div class="card bg-info text-white mb-4">
+                                <div class="card-body">Sensex : {{total_act_retailer}}</div>
+                                <!-- <div class="card-footer d-flex align-items-center justify-content-between">
+                                    <a class="small text-white stretched-link" href="#">View Details</a>
+                                    <div class="small text-white"><i class="fas fa-angle-right"></i></div>
+                                </div> -->
+                            </div>
+                        </div>
+                        <div class="col-xl-3 col-md-6">
+                            <div class="card bg-success text-white mb-4">
+                                <div class="card-body">Stocks : {{active_stocks}}</div>
+                                <!-- <div class="card-footer d-flex align-items-center justify-content-between">
+                                    <a class="small text-white stretched-link" href="#">View Details</a>
+                                    <div class="small text-white"><i class="fas fa-angle-right"></i></div>
+                                </div> -->
+                            </div>
+                        </div>
+                        <div class="col-xl-3 col-md-6">
+                            <div class="card bg-info text-white mb-4">
+                                <div class="card-body">Total Investment : {{total_blk_retailer}}</div>
+                                <!-- <div class="card-footer d-flex align-items-center justify-content-between">
+                                    <a class="small text-white stretched-link" href="#">View Details</a>
+                                    <div class="small text-white"><i class="fas fa-angle-right"></i></div>
+                                </div> -->
+                            </div>
+                        </div>
+                    </div>
+                    <!-- <div class="row">
+                        <div class="col-xl-6">
+                            <div class="card mb-4">
+                                <div class="card-header"><i class="fas fa-chart-area mr-1"></i>Recent Stock Prices</div>
+                                <div class="card-body"><canvas id="commissionChart" width="100%" height="40"></canvas></div>
+                            </div>
+                        </div>
+                        <div class="col-xl-6">
+                            <div class="card mb-4">
+                                <div class="card-header"><i class="fas fa-chart-bar mr-1"></i>Stock Prices</div>
+                                <div class="card-body"><canvas id="netPayChart" width="100%" height="40"></canvas></div>
+                            </div>
+                        </div>
+                    </div> -->
+                    <div class="card mb-4">
+                        <div class="card-header"><i class="fas fa-table mr-1"></i>Stock Prices</div>
+                        <div class="card-body">
+                            <div class="table-responsive">
+                                <table class="table table-bordered" id="last7days" width="100%" cellspacing="0">
+                                    <thead>
+                                        <tr>
+                                            <th>Date</th>
+                                            <th>Stock</th>
+                                            <th>Open</th>
+                                            <th>High</th>
+                                            <th>Low</th>
+                                            <th>Close</th>
+                                            <th>Last Price</th>
+                                            <th>My Shares</th>
+                                            <th>Profit/Loss</th>
+                                            <th>Profit/Loss %</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {% for each_stock in all_stocks %}
+                                        <tr>
+                                            <td>{{each_stock.secDate}}</td>
+                                            <td>{{each_stock.ticker}}</td>
+                                            <td>{{each_stock.open | floatformat:3}}</td>
+                                            <td>{{each_stock.dayHigh | floatformat:3}}</td>
+                                            <td>{{each_stock.dayLow  | floatformat:3}}</td>
+                                            <td>{{each_stock.closePrice  | floatformat:3}}</td>
+                                            <td>{{each_stock.lastPrice  | floatformat:3}}</td>
+                                            <td>{{each_stock.total_shares}}</td>
+                                            <td>{{each_stock.PL  | floatformat:3}}</td>
+                                            <td>{{each_stock.PL_perc  | floatformat:3}}</td>
+                                        </tr>
+                                        {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card mb-4">
+                        <div class="card-header"><i class="fas fa-table mr-1"></i>Trades in last 7 days</div>
+                        <div class="card-body">
+                            <div class="table-responsive">
+                                <table class="table table-bordered" id="last7days" width="100%" cellspacing="0">
+                                    <thead>
+                                        <tr>
+                                            <th>Stock</th>
+                                            <th>Shares</th>
+                                            <th>Type</th>
+                                            <th>Price</th>
+                                            <th>Date</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {% for each_trade in recent_trades %}
+                                        <tr>
+                                            <td>{{each_trade.stock_name}}</td>
+                                            <td>{{each_trade.shares}}</td>
+                                            <td>{{each_trade.is_buy}}</td>
+                                            <td>{{each_trade.price | floatformat:3}}</td>
+                                            <td>{{each_trade.txn_date}}</td>
+                                        </tr>
+                                        {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <script src="{% static '/js/scripts.js' %}"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.min.js" crossorigin="anonymous"></script>
+    <!-- <script>
+
+        let labels = "{{labels|safe}}".split(',');
+        let commission_chart_values = "{{commission_chart_values|safe}}".split(',').map(Number);
+        let netpay_chart_values = "{{netpay_chart_values|safe}}".split(',').map(Number);
+
+        // Set new default font family and font color to mimic Bootstrap's default styling
+        Chart.defaults.global.defaultFontColor = '#292b2c';
+
+        // Area Chart Example
+        var ctx = document.getElementById("commissionChart");
+        var myLineChart = new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: labels,
+                datasets: [{
+                    label: "Commissions",
+                    lineTension: 0.3,
+                    backgroundColor: "rgba(2,117,216,0.2)",
+                    borderColor: "rgba(2,117,216,1)",
+                    pointRadius: 5,
+                    pointBackgroundColor: "rgba(2,117,216,1)",
+                    pointBorderColor: "rgba(255,255,255,0.8)",
+                    pointHoverRadius: 5,
+                    pointHoverBackgroundColor: "rgba(2,117,216,1)",
+                    pointHitRadius: 50,
+                    pointBorderWidth: 2,
+                    data: commission_chart_values,
+                }],
+            },
+            options: {
+                scales: {
+                    xAxes: [{
+                        time: {
+                            unit: 'date'
+                        },
+                        gridLines: {
+                            display: false
+                        },
+                        ticks: {
+                            maxTicksLimit: 7
+                        }
+                    }],
+                    yAxes: [{
+                        ticks: {
+                            min: 0,
+                            max: 1000,
+                            maxTicksLimit: 10
+                        },
+                        gridLines: {
+                            color: "rgba(0, 0, 0, .125)",
+                        }
+                    }],
+                },
+                legend: {
+                    display: false
+                }
+            }
+        });
+
+        var ctx = document.getElementById("netPayChart");
+        var myLineChart = new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: labels,
+                datasets: [{
+                    label: "Net Pay",
+                    backgroundColor: "rgba(2,117,216,1)",
+                    borderColor: "rgba(2,117,216,1)",
+                    data: netpay_chart_values,
+                }],
+            },
+            options: {
+                scales: {
+                    xAxes: [{
+                        time: {
+                            unit: 'date'
+                        },
+                        gridLines: {
+                            display: false
+                        },
+                        ticks: {
+                            maxTicksLimit: 7
+                        }
+                    }],
+                    yAxes: [{
+                        ticks: {
+                            min: 0,
+                            max: 1000,
+                            maxTicksLimit: 10
+                        },
+                        gridLines: {
+                            display: true
+                        }
+                    }],
+                },
+                legend: {
+                    display: false
+                }
+            }
+        });
+
+
+        $(document).ready(function () {
+            $('#last7days').DataTable();
+        });
+    </script> -->
+</body>
+
+{% endblock %}

@@ -1,0 +1,156 @@
+{% extends 'deskapp/main.html' %}
+{% load static %}
+{% block content %}
+
+<body class="sb-nav-fixed">
+    {% include 'deskapp/navbar.html' %}
+    <div id="layoutSidenav">
+        {% include 'deskapp/sidebar.html' %}
+        <div id="layoutSidenav_content">
+            <main>
+                <div class="container-fluid">
+                    <div class="row form-group"></div>
+                    <div class="row">
+                        <div class="col-xl-12 mx-auto">
+                            <div class="card mb-4">
+                                <div class="card-header"><strong>Record a Trade</strong></div>
+                                <div class="card-body">
+                                    <form method="POST" action="" id="addTransaction">
+                                        {% csrf_token %}
+                                        <!-- <h3 class="mt-4" style="margin: 3% 0% 3% 0%;"></h3> -->
+                                        <div class="form-row">
+                                            <div class="col-md-5">
+                                                <div class="form-group">
+                                                    <label>All Stocks</label>
+                                                    <select class="form-control" name="stock_id"
+                                                        id="stock_id" data-placeholder="Select Stock"
+                                                        data-allow-clear="1">
+                                                        <option value=""></option>
+                                                        {% for i in all_stocks %}
+                                                        <option value="{{i.stock_code}}">{{i.stock_name}}</option>
+                                                        {% endfor %}
+                                                    </select>
+                                                    <small class="form-text text-muted">Select stock for which Trade needs to be recorded</small>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-1"></div>
+                                            <div class="col-md-5">
+                                                <div class="form-group">
+                                                    <label>Shares</label>
+                                                    <input type="text" class="form-control" name="shares" id="shares"
+                                                        placeholder="Enter Shares">
+                                                    <small class="form-text text-muted">No of shares sold or bought</small>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="form-row">
+                                            <div class="col-md-5">
+                                                <div class="form-group">
+                                                    <label>Enter Transaction Date</label>
+                                                    <input type="date" class="form-control" name="txn_date" id="txn_date"
+                                                        placeholder="Enter Trade Date">
+                                                    <small class="form-text text-muted">Date at which trade was
+                                                        recorded<br></small>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-1"></div>
+                                            <div class="col-md-5">
+                                                <div class="form-group">
+                                                    <label>Transaction ID</label>
+                                                    <input type="text" class="form-control" name="txn_id" id="txn_id"
+                                                        placeholder="Enter Transaction id">
+                                                    <small class="form-text text-muted">Transaction unqiue
+                                                        identifier</small>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="form-row">
+                                            <div class="col-md-5">
+                                                <div class="form-group">
+                                                    <input type="radio" id="buy" name="is_buy" value="1">
+                                                    <label for="buy">Buy</label><br>
+                                                    <input type="radio" id="sell" name="is_buy" value="0">
+                                                    <label for="sell">Sell</label><br>
+                                                    <small class="form-text text-muted">Stock Purchased or sold</small>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-1"></div>
+                                            <div class="col-md-5">
+                                                <div class="form-group">
+                                                    <label>Enter Price</label>
+                                                    <input type="number" class="form-control" name="price" id="price"
+                                                        placeholder="Enter Price">
+                                                    <small class="form-text text-muted">Price at which stock was sold or
+                                                        bought</small>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="form-row always">
+                                            <div class="col-md-1">
+                                                <div class="form-group">
+                                                    <button type="submit" class="btn btn-secondary"
+                                                        id="submit_btn">Reset</button>
+                                                </div>
+                                            </div>
+                                            <!-- <div class="col-md-1"></div> -->
+                                            <div class="col-md-1">
+                                                <div class="form-group">
+                                                    <button type="submit" class="btn btn-primary"
+                                                        id="submit_btn">Submit</button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <script src="{% static '/js/scripts.js' %}"></script>
+    <script>
+
+        $('select').select2({
+            theme: 'bootstrap4',
+        });
+
+        $("#addTransaction").validate({
+            rules: {
+                // is_buy: {
+                //     required: true
+                // },
+                price:{
+                    required:true
+                },
+                shares:{
+                    required:true
+                },
+                txn_date:{
+                    required:true
+                },
+                stock_id:{
+                    required:true
+                },
+                txn_id:{
+                    required:true
+                }
+                // retailerusername: {
+                //     required: true
+                // },
+                // status: {
+                //     required: true,
+                // }
+            },
+            messages: {
+                ticker: {
+                    required: "Ticker symbol is required."
+                }
+            }
+        });
+    </script>
+</body>
+
+{% endblock %}

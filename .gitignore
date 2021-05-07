@@ -1,0 +1,6 @@
+firebase-adminsdk.json
+*.cfg
+__pycache__/
+.env
+.DS_Store
+

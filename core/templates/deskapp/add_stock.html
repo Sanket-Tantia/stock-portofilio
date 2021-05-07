@@ -1,0 +1,149 @@
+{% extends 'deskapp/main.html' %}
+{% load static %}
+{% block content %}
+
+
+<style>
+    .invalid {
+        display: none;
+    }
+</style>
+
+<body class="sb-nav-fixed">
+    {% include 'deskapp/navbar.html' %}
+    <div id="layoutSidenav">
+        {% include 'deskapp/sidebar.html' %}
+        <div id="layoutSidenav_content">
+            <main>
+                <div class="container-fluid">
+                    <div class="row form-group"></div>
+                    <div class="row">
+                        <div class="col-xl-12 mx-auto">
+                            <div class="card mb-4">
+                                <div class="card-header"><strong>Add a New Stock</strong></div>
+                                <div class="card-body">
+                                    <form method="POST" action="" id="addstockform">
+                                        {% csrf_token %}
+                                        <!-- <h3 class="mt-4" style="margin: 3% 0% 3% 0%;"></h3> -->
+                                        <div class="form-row">
+                                            <div class="col-md-5">
+                                                <label>All Stocks</label>
+                                                    <select class="form-control" name="ticker"
+                                                        id="ticker" data-placeholder="Select Stock"
+                                                        data-allow-clear="1">
+                                                        <option value=""></option>
+                                                        {% for i in all_stock_codes %}
+                                                        <option value="{{i.stock_code}}">{{i.companyName}}</option>
+                                                        {% endfor %}
+                                                    </select>
+                                                    <small class="form-text text-muted">Add a stock for trading</small>
+                                            </div>
+                                        </div>
+                                        <div class="form-row invalid track">
+                                            <div class="col-md-5">
+                                                <div class="form-group">
+                                                    <label>Company Name</label>
+                                                    <input type="text" class="form-control" name="company_name"
+                                                        id="company_name" placeholder="Enter Company Name" value="{{company_name}}">
+                                                    <small class="form-text text-muted">Company Name listed in market</small>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-1"></div>
+                                            <div class="col-md-5">
+                                                <div class="form-group">
+                                                    <label>ISIN Code</label>
+                                                    <input type="text" class="form-control" name="isin_code"
+                                                        id="isin_code" placeholder="Enter ISIN Code" value="{{isin_code}}">
+                                                    <small class="form-text text-muted">Unique for each stock. Cannot be changed</small>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="form-row invalid track">
+                                            <div class="col-md-5">
+                                                <div class="form-group">
+                                                    <label>Exchange</label>
+                                                    <input type="text" class="form-control" name="exchange"
+                                                        id="exchange" placeholder="Enter Exchange" value="{{exchange}}">
+                                                    <small class="form-text text-muted">e.g. NSE, BSE, NASDAQ</small>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-1"></div>
+                                            <div class="col-md-5">
+                                                <div class="form-group">
+                                                    <label>Additional Details</label>
+                                                    <input type="text" class="form-control" name="details"
+                                                        id="details" placeholder="Details">
+                                                    <small class="form-text text-muted">Enter any additonal details you want to save.</small>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="form-row always">
+                                            <div class="col-md-1">
+                                                <div class="form-group">
+                                                    <button type="submit" class="btn btn-secondary"
+                                                    id="submit_btn" onclick="$('.track').addClass('invalid');document.getElementById('ticker').readOnly=false;$('#ticker').val('')">Reset</button>
+                                                </div>
+                                            </div>
+                                            <!-- <div class="col-md-1"></div> -->
+                                            <div class="col-md-1">
+                                                <div class="form-group">
+                                                    <button type="submit" class="btn btn-primary"
+                                                        id="submit_btn">Submit</button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <script src="{% static '/js/scripts.js' %}"></script>
+    <script>
+        $('select').select2({
+            theme: 'bootstrap4',
+        });
+
+        $().ready(function () {
+            let is_ticker_invalid = "{{is_ticker_invalid | safe}}";
+            if (is_ticker_invalid == 'True') {
+                let validator = $("#addstockform").validate()
+                validator.showErrors({
+                    "ticker": "No Stock found for Ticker symbol. Please enter correct value."
+                });
+            } else if(is_ticker_invalid == 'False') {
+                ticker_symbol = "{{ticker | safe}}";
+                company_name = "{{company_name | safe}}";
+                // $("select").val(ticker_symbol);
+                // $('#ticker').select2(ticker_symbol, company_name)
+                // $("select").select2({disabled:readonly});
+                $(".track").removeClass("invalid");
+            }
+
+            $("#addstockform").validate({
+                rules: {
+                    ticker: {
+                        required: true
+                    }
+                    // retailerusername: {
+                    //     required: true
+                    // },
+                    // status: {
+                    //     required: true,
+                    // }
+                },
+                messages: {
+                    ticker: {
+                        required: "Ticker symbol is required."
+                    }
+                }
+            });
+        });
+    </script>
+</body>
+
+{% endblock %}
