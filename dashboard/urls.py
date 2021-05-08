@@ -9,6 +9,6 @@ urlpatterns = [
     path('record', views.record_trade, name='record-trade'),
 
     # Matches any html file
-    re_path(r'^.*\.*', views.pages, name='pages'),
+    # re_path(r'^.*\.*', views.pages, name='pages'),
 
 ]
